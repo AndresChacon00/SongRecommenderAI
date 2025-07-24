@@ -50,10 +50,7 @@ with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as out_file:
     # If any songs on spotify_v2_rows are not in merged_ids, add them to the csv
     for row in spotify_v2_rows:
         track_id = row["track_id"]
-        if (
-            track_id not in merged_ids
-            and track_id in id_to_year
-        ):
+        if track_id not in merged_ids:
             # remove album_name key from row
             row.pop("album_name", None)
             writer.writerow(row)
