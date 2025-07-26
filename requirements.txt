@@ -1,2 +1,11 @@
 spotipy
 python-dotenv
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+plotly
+ipykernel
+nbformat
+scipy
