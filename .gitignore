@@ -2,3 +2,6 @@
 .venv/
 .env
 *.cache
+__pycache__
+!/song-recommender-backend/data/merged_songs.csv
+
