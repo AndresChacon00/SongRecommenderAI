@@ -78,7 +78,9 @@ def recommend(request: RecommendationRequest):
     ]
     df = pd.DataFrame(filtered_features)
     if request.model_type == "knn":
-        recs = knn_model.recomend_songs(df).to_dict(orient="records")
+        recs = knn_model.recomend_songs(df, n_recommendations=15).to_dict(
+            orient="records"
+        )
         # Filter out songs that are already in the request
         input_ids = {song.id for song in request.songs}
         recs = [rec for rec in recs if rec.get("track_id") not in input_ids]
@@ -86,6 +88,16 @@ def recommend(request: RecommendationRequest):
         recs = kmeans_model.recommend_songs(df)
     else:
         recs = dbscan_model.recommend_songs(df)
+
+    # Remove repeated songs based on 'track_id'
+    seen_ids = set()
+    unique_recs = []
+    for rec in recs:
+        track_id = rec.get("track_id")
+        if track_id and track_id not in seen_ids:
+            unique_recs.append(rec)
+            seen_ids.add(track_id)
+    recs = unique_recs
     return {"recommendations": recs}
 
 
